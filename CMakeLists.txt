@@ -2,8 +2,18 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(RPG-41 VERSION 0.1.0)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+
 # Allows us to outputfiles into the project instead of the build directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS "-std=c++20")
 
 
 # VERSION USE: This is going to be a message notifying just in case, I forget.
@@ -26,6 +36,17 @@ find_package(GLEW REQUIRED)
 find_package(GLUT REQUIRED)
 
 include_directories(${GLUT_INCLUDE_DIRS})
+
+
+# We are adding more compile options
+# Applying linked-time optimizations.
+add_compile_options(
+  -flto # Combines all multiple objs into one executable
+  -fdata-sections #  Enabling data optimization. Data not used by program will not be in executable.
+  -fvisibility-inlines-hidden # Hide functions in headers helping reduce size of executable
+  -fno-rtti # This flag disables generation of run-tiome type info (which may be used to reduce code size)
+)
+
 
 # Handling our file structures here.
 # This allows us to include our libraries throughout this entire project.
@@ -90,3 +111,10 @@ target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 target_link_libraries(${PROJECT_NAME} "-framework IOKit")
 target_link_libraries(${PROJECT_NAME} glfw ${OPENGL_gl_LIBRARY})
 target_link_libraries(${PROJECT_NAME} GLEW::GLEW) # This helps us get rid of the "___glewGenBuffers" reference error
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    -flto
+    -fdata-sections
+    -fvisibility-inlines-hidden
+)
