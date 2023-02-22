@@ -43,11 +43,14 @@ public:
 
     void startEvents(){
         while(window->pollEvent(event)){
+            
+            // Close window when we press escape.
             if(event.key.code == sf::Keyboard::Escape) {
                 keyMovements.stateClose = true;
                 return;
             }
 
+            // If we click any related key we press we switch the state to true.
             if(event.key.code == sf::Keyboard::W) keyMovements.wPressed = true;
         }
     }
