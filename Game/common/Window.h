@@ -10,6 +10,8 @@
  * Which allows us to do more then one thing instead of relying all our code to be used in main.
  * 
  * This is to encapsulate how the code base will be.
+ * 
+ * https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Image.php
  */
 
 class Window{
@@ -33,6 +35,14 @@ public:
     void mainloop(){
         // This while loop says (as long the window is opened, then we display the window.)
         // Then after clicking the escape key we window->close(); which closes the window.
+
+        sf::Texture background;
+        std::string filename = "Game/assets/backgroundTest.jpg";
+        if(!background.loadFromFile(filename)) return;
+
+        sf::Sprite bgSprite(background);
+        bgSprite.setTexture(background);
+
         while(window->isOpen()){
             events->startEvents();
             
@@ -42,6 +52,10 @@ public:
             if(events->forward()) std::cout << "W key has been pressed!\n";
 
             events->reset();
+
+            window->clear();
+            window->draw(bgSprite);
+            window->display();
         }
     }
 
