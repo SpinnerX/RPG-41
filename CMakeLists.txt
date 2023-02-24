@@ -15,6 +15,10 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS "-std=c++20")
 
+include_directories(Game)
+include_directories(Game/core)
+include_directories(Game/common)
+
 
 # VERSION USE: This is going to be a message notifying just in case, I forget.
 # VERSION: Cmake works on an M1 Mac 2022 December (Current month)
