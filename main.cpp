@@ -1,7 +1,7 @@
-#include "Game/common/Window.h"
+#include "Game/core/Window.h"
 
 int main(){
-    Window window = Window(600, 480, "Window");
+    Window window = Window(600, 480, "Code Adventures");
     
 
     window.mainloop();
