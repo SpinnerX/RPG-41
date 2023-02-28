@@ -9,7 +9,8 @@ public:
     Button(sf::RenderWindow* _window, std::string title, sf::Vector2f pos, sf::Vector2f size) {}
     Button(std::string t, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor) {
         text.setString(t);
-        text.setColor(textColor);
+        // text.setColor(textColor);
+        text.setFillColor(textColor);
         // text.setCharacterSize();
 
         button.setSize(size);
@@ -28,7 +29,8 @@ public:
     }
 
     void setTextColor(sf::Color color) {
-        text.setColor(color);
+        // text.setColor(color);
+        text.setFillColor(color);
     }
 
     void setPosition (sf::Vector2f pos) {

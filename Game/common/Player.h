@@ -3,10 +3,7 @@
 
 class Player {
 public:
-    sf::Sprite shape;
-    sf::Texture texture;
-    sf::Vector2f position;
-    std::vector<Bullet> bullets;
+
 
     Player() {
         std::string filename = "Game/assets/rocket-texture.png";
@@ -35,4 +32,10 @@ public:
     void draw(sf::RenderWindow* window){
         window->draw(shape);
     }
+
+private:
+    sf::Sprite shape;
+    sf::Texture texture;
+    sf::Vector2f position;
+    std::vector<Bullet> bullets;
 };

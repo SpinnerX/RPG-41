@@ -11,24 +11,25 @@
  */
 
 struct KeyState{
-        KeyState(){
-            stateClose = false; // window state to close.
-
-            // Variables indicating when we press WASD (for movements, this is just because our ideas will involve movement animations.)
-            wPressed = false;
-            aPressed = false;
-            sPressed = false;
-            dPressed = false;
-            enterPressed = false;
-        }
+    KeyState(){
+        stateClose = false; // window state to close.
+        // Variables indicating when we press WASD (for movements, this is just because our ideas will involve movement animations.)
+        wPressed = false;
+        aPressed = false;
+        sPressed = false;
+        dPressed = false;
+        enterPressed = false;
+        qPressed = false;
+    }
         
         // reset these to default values, so when we click and release it switches the values for example like ON/OFF states.
     void reset(){
-            wPressed = false;
-            aPressed = false;
-            sPressed = false;
-            dPressed = false;
-            enterPressed = false; 
+        wPressed = false;
+        aPressed = false;
+        sPressed = false;
+        dPressed = false;
+        enterPressed = false; 
+        qPressed = false;
     }
         
     bool stateClose; // window state to close.
@@ -38,6 +39,7 @@ struct KeyState{
     bool sPressed;
     bool dPressed;
     bool enterPressed;
+    bool qPressed;
 };
 
 
@@ -83,12 +85,19 @@ public:
                 std::cout << "Enter Pressed\n";
                 keyMovements.enterPressed = true;
             }
+
+            if(event.key.code == sf::Keyboard::Q){
+                std::cout << "Q Pressed\n";
+                keyMovements.qPressed = true;
+            }
         }
     }
     KeyState state() const { return keyMovements; }
     // Allow us to make function calls to make it easier to know what functions to call to allow for flexibility.
     bool forward() const{ return keyMovements.wPressed; }
     bool userEnter() const {return keyMovements.enterPressed; }
+
+    bool quitGame() const { return keyMovements.qPressed; }
 
     void reset(){ keyMovements.reset(); }
 
