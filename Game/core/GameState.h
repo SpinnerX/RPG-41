@@ -22,11 +22,9 @@ public:
         width = w;
         height = h;
         this->title = title;
-
-        
     }
 
-    ~GameState(){
+    virtual ~GameState(){
         for(size_t i = 0; i < enemies.size(); i++) delete enemies[i];
         delete window;
     }
@@ -41,16 +39,19 @@ public:
         
 
         // This allows us to reset the enemies original position everytime we go back to this function call.
-        enemies = std::vector<Enemy *>();
+        enemies = std::vector<GameCharacter *>();
+
+        
         maxEnemies = 4;
         for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
 
-
+        player = new Player(maxEnemies);
+        
 
         window->setVisible(true);
         window->draw(backgroundSprite);
 
-        player.draw(window);
+        player->draw(window);
 
         window->draw(backgroundSprite);
 
@@ -79,7 +80,7 @@ public:
 
 private:
     void state(){
-        player.update(events->state()); // Allowing the player for movements
+        player->update(events->state()); // Allowing the player for movements
 
         //Render
         window->clear();
@@ -88,7 +89,7 @@ private:
         float x = 0.1f;
         float y = 0.0f;
         // Updates the movements of the enemies
-        for(Enemy* enemy : enemies){
+        for(const GameCharacter* enemy : enemies){
             /**
              * @brief 
              TODO: Debug and fix the movement
@@ -98,18 +99,18 @@ private:
              This is a bug, that we need help fixing...
              * 
              */
-            enemy->update(x, y);
+            // enemy->update(x, y);
 
         }
 
-        player.collision(enemies);
+        player->collision(enemies);
 
 
-        for(Enemy* enemy : enemies) enemy->draw(window);
+        for(GameCharacter* enemy : enemies) enemy->draw(window);
         
-        player.draw(window);
+        player->draw(window);
 
-        player.renderBullets(window);
+        player->renderBullets(window);
 
         window->display();
     }
@@ -118,7 +119,7 @@ private:
     sf::RenderWindow* window;
     KeyboardInputHandler* events;
 
-    Player player;
+    Player* player;
 
     int maxEnemies; // Max of enemies to spawn.
     int enemyAlive; // Keeping track of the count of enemies alive in this current game.
@@ -127,7 +128,7 @@ private:
 
 
     // Enemy enemy;
-    std::vector<Enemy *> enemies;
+    std::vector<GameCharacter *> enemies;
     
 
 
@@ -136,4 +137,6 @@ private:
 private:
     unsigned int width, height;
     std::string title;
+
+    SoundFX startGameSound;
 };
