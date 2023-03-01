@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "SoundFX.h"
+#include "GameState.h"
 
 class Player : public GameCharacter{
 public:
@@ -26,13 +27,34 @@ public:
         if(state.spacePressed) shoot();
     }
 
+    void update (float x, float y) override {}
+
     void shoot(){
         std::cout << "Shooting bullets function called!\n";
         bullets.push_back(new Bullet(bodyShape.getPosition().x, bodyShape.getPosition().y, "Game/assets/bullet.png"));
     }
 
-    sf::FloatRect getBoundaries() override { return bodyShape.getGlobalBounds(); }
+    void moveLeftX(){
+        bodyShape.move(-10.0f, 0.0f);
+    }
+    void moveRightX(){
+        bodyShape.move(10.f, 0.0);
+    }
+    void moveUpY(){
+        bodyShape.move(0.0f, -10.0f);
+    }
+    void moveDownY(){
+        bodyShape.move(0.0f, 10.0f);
+    }
 
+    sf::FloatRect getBoundaries() override { return bodyShape.getGlobalBounds(); }
+    
+    //get X
+    sf::Vector2f getPosition() override { return bodyShape.getPosition(); }
+
+    //get Y
+    //float getPosY() { return bodyShape.getPosition().y; }
+    
     // Handling collision for the enemies.
     void collision(std::vector<GameCharacter *>& enemies){
         if(!enemies.empty() && !bullets.empty()){
@@ -42,6 +64,7 @@ public:
                         bullets.erase(bullets.begin() + i);
                         enemies.erase(enemies.begin() + j);
                         sounds.playSound(4);
+                        score += 1;
                         enemiesAlive -= 1; // decrement everytime an enemy dies.
                         return;
                     }
@@ -63,6 +86,10 @@ public:
         window->draw(bodyShape);
     }
 
+    int getScore() {
+        return score;
+    }
+
 private:
 
     std::vector<Bullet *> bullets;
@@ -73,6 +100,7 @@ private:
 
 
     int enemiesAlive;
+    int score;
 
 
     SoundFX sounds;

@@ -28,13 +28,16 @@ public:
     }
 
     // This is what animates the enemy movements.
-    void update(float x, float y){
+    void update(float x, float y) override {
         bodyShape.move(x, y);
     }
 
     sf::FloatRect getBoundaries() override { return bodyShape.getGlobalBounds(); }
 
-    sf::Vector2f getPosition() const { return bodyShape.getPosition(); }
+
+
+
+    sf::Vector2f getPosition() override { return bodyShape.getPosition(); }
 
     void draw(sf::RenderWindow* window) override {
         window->draw(bodyShape);

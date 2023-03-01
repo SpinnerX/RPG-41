@@ -81,15 +81,41 @@ public:
 private:
     void state(){
         player->update(events->state()); // Allowing the player for movements
+        
+        //bounds checking to make sure that the player cannot move off of the screeen    
+        while ((player->getPosition().x) > 500) {
+            std::cout << "player is off the right side of the screen!\n";
+            //std::cout << "Y Val: " << player->getPosiY() << std::endl;
+            player->moveLeftX();
+        }
+        while ((player->getPosition().x) < 0) {
+            std::cout << "player is off the left side of the screen!\n";
+            player->moveRightX();
+        }
+        while((player->getPosition().y) > 400) {
+            std::cout << "player is below the screen!\n";
+            player->moveUpY();
+        }
+        while ((player->getPosition().y) < 0) {
+            std::cout << "Player is above the screen\n";
+            player->moveDownY();
+        }
 
+        sf::Font font;
+        std::string fontFilename = "Game/assets/fonts/space_invaders.ttf";
+        if (!font.loadFromFile(fontFilename)) return;
+        sf::Text text(std::to_string(player->getScore()), font, 30);
+        text.setOrigin(-550, -50.0);
+        
         //Render
         window->clear();
         window->draw(backgroundSprite);
+        window->draw(text);
 
         float x = 0.1f;
         float y = 0.0f;
         // Updates the movements of the enemies
-        for(const GameCharacter* enemy : enemies){
+        for(GameCharacter* enemy : enemies){
             /**
              * @brief 
              TODO: Debug and fix the movement
@@ -99,7 +125,13 @@ private:
              This is a bug, that we need help fixing...
              * 
              */
-            // enemy->update(x, y);
+            enemy->update(0.1f, 0.0f);
+            //while (enemy->getPosition().x > 400) {
+                //std::cout << "enemy is to the right of the screen!\n";
+                //enemy->update(-0.1f, 0.0f);
+                //delete enemy here
+            //}
+            
 
         }
 
@@ -114,6 +146,7 @@ private:
 
         window->display();
     }
+
 
 private:
     sf::RenderWindow* window;
@@ -137,6 +170,7 @@ private:
 private:
     unsigned int width, height;
     std::string title;
+    int score;
 
     SoundFX startGameSound;
 };
