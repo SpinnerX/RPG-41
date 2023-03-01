@@ -15,7 +15,6 @@ public:
     }
 
     Enemy(float x, float y, std::string filename){
-        
         texture = new sf::Texture();
         if(!texture->loadFromFile(filename)) return;
 
@@ -26,6 +25,7 @@ public:
         bodyShape.setPosition(x, y);
     }
 
+    // This is what animates the enemy movements.
     void update(float x, float y){
         bodyShape.move(x, y);
     }
@@ -40,7 +40,6 @@ public:
 
 private:
     sf::RectangleShape enemyBodyShape;
-    // sf::Sprite shape;
     sf::RectangleShape bodyShape;
     sf::Texture* texture;
     sf::Vector2f position;

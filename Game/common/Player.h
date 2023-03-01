@@ -13,38 +13,23 @@ public:
         bodyShape.setTexture(texture);
         bodyShape.setScale(10.0f, 10.0f);
         bodyShape.setPosition(300.f, 300.f);
-        
+        bullets = std::vector<Bullet *>();
     }
 
     void update(KeyState state) {
-        // initBullets();
         if(state.wPressed) bodyShape.move(0.0f, -10.0f);
         if(state.aPressed) bodyShape.move(-10.f, 0.f);
         if(state.dPressed) bodyShape.move(10.f, 0.f);
         if(state.sPressed) bodyShape.move(0.0f, 10.0f);
-        if(state.spacePressed) initBullets();
+        if(state.spacePressed) shoot();
     }
 
-    void initBullets(){
-        bullets = std::vector<Bullet *>();
+    void shoot(){
         std::cout << "Shooting bullets function called!\n";
         bullets.push_back(new Bullet(bodyShape.getPosition().x, bodyShape.getPosition().y, "Game/assets/bullet.png"));
     }
 
-    void update(float x, float y, std::vector<Enemy *>& enemies){
-        // for(size_t i = 0; i < bullets.size(); i++) bullets[i]->update(x, y);
-        for(size_t i = 0; i < bullets.size(); i++){
-            bullets[i]->update(x, y);
-
-            for(size_t i = 0; i < enemies.size(); i++){
-                if(bullets[i]->hit(enemies[i]->getBoundaries())){
-                    std::cout << "Enemy Hit!\n";
-                    enemies.erase(enemies.begin() + i);
-                }
-            }
-        }
-    }
-
+    // Handling collision for the enemies.
     void collision(std::vector<Enemy *>& enemies){
         if(!enemies.empty() && !bullets.empty()){
             for(size_t i = 0; i < bullets.size(); i++){
@@ -52,7 +37,7 @@ public:
                     if(bullets[i]->hit(enemies[j]->getBoundaries())){
                         bullets.erase(bullets.begin() + i);
                         enemies.erase(enemies.begin() + j);
-                        break;
+                        return;
                     }
                 }
             }
