@@ -88,6 +88,8 @@ private:
             enemies[i]->update(0.1f, 0.f);
         }
 
+        player.collision(enemies);
+
         // for(Enemy* enemy : enemies) enemy->draw(window);
         for(int i = 0; i < enemies.size(); i++){
             enemies[i]->draw(window);
@@ -106,17 +108,6 @@ private:
 
         maxEnemies = 4;
         for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
-    }
-
-    // Removing enemies based on their given location and by index.
-    void removeEnemy(int index){
-        // The index is how many moves the enemy made to remove that enemy
-        enemies.erase(enemies.begin() + index); // This is whats going to remove the enemy
-    }
-
-    // This should return an index of the enemy we hit.
-    int hit(){
-
     }
 
 private:
