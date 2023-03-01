@@ -28,8 +28,7 @@ public:
     void initBullets(){
         bullets = std::vector<Bullet *>();
         std::cout << "Shooting bullets function called!\n";
-        maxAmmo = 500;
-        for(size_t i = 0; i < maxAmmo; i++) bullets.push_back(new Bullet(bodyShape.getPosition().x, bodyShape.getPosition().y, "Game/assets/bullet.png"));
+        bullets.push_back(new Bullet(bodyShape.getPosition().x, bodyShape.getPosition().y, "Game/assets/bullet.png"));
     }
 
     void update(float x, float y, std::vector<Enemy *>& enemies){
@@ -41,6 +40,20 @@ public:
                 if(bullets[i]->hit(enemies[i]->getBoundaries())){
                     std::cout << "Enemy Hit!\n";
                     enemies.erase(enemies.begin() + i);
+                }
+            }
+        }
+    }
+
+    void collision(std::vector<Enemy *>& enemies){
+        if(!enemies.empty() && !bullets.empty()){
+            for(size_t i = 0; i < bullets.size(); i++){
+                for(size_t j = 0; j < enemies.size(); j++){
+                    if(bullets[i]->hit(enemies[j]->getBoundaries())){
+                        bullets.erase(bullets.begin() + i);
+                        enemies.erase(enemies.begin() + j);
+                        break;
+                    }
                 }
             }
         }
