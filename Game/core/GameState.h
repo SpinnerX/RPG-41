@@ -4,6 +4,9 @@
 #include "common/Player.h"
 #include "common/Enemy.h"
 #include "common/ButtonOld.h"
+#include <vector>
+#include <unistd.h>
+
 
 /**
  * @brief 
@@ -20,9 +23,17 @@ public:
         width = w;
         height = h;
         this->title = title;
+
+        enemies = std::vector<Enemy *>();
+
+        maxEnemies = 4;
+        for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
     }
 
-    ~GameState(){ delete window; }
+    ~GameState(){
+        for(size_t i = 0; i < enemies.size(); i++) delete enemies[i];
+        delete window;
+    }
 
     void begin(){
         // Creates a new window everytime we leave and come back to it.
@@ -30,6 +41,8 @@ public:
         window->create(sf::VideoMode(width, height), title);
 
         events = new KeyboardInputHandler(window);
+
+        initEnemies(); // Spawn enemies, everytime this window opens up.
 
         window->setVisible(true);
         window->draw(backgroundSprite);
@@ -56,7 +69,6 @@ public:
             state();
 
             events->reset();
-
             clock.restart();
         }
     }
@@ -65,14 +77,37 @@ public:
 
 private:
     void state(){
-        player.updatePosition(events->state());
-        enemy.updatePosition();
+        player.update(events->state()); // Allowing the player for movements
 
         //Render
         window->clear();
+        window->draw(backgroundSprite);
         player.draw(window);
-        enemy.draw(window);
+
+        // Updating enemies movements.
+        for(Enemy* enemy : enemies) enemy->update(0.1f, 0.f);
+
+        for(Enemy* enemy : enemies) enemy->draw(window);
+
+        player.renderBullets(window);
+        
         window->display();
+    }
+
+
+
+private:
+    void initEnemies(){
+        enemies = std::vector<Enemy *>();
+
+        maxEnemies = 4;
+        for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
+    }
+
+    // Removing enemies based on their given location and by index.
+    void removeEnemy(int index){
+        // The index is how many moves the enemy made to remove that enemy
+        enemies.erase(enemies.begin() + index); // This is whats going to remove the enemy
     }
 
 private:
@@ -80,7 +115,16 @@ private:
     KeyboardInputHandler* events;
 
     Player player;
-    Enemy enemy;
+
+    int maxEnemies; // Max of enemies to spawn.
+    int enemyAlive; // Keeping track of the count of enemies alive in this current game.
+    int enemySpawnTimer;
+    float enemySpawnMaxTimer;
+
+
+    // Enemy enemy;
+    std::vector<Enemy *> enemies;
+    
 
 
     sf::Sprite backgroundSprite;
