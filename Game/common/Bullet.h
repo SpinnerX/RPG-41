@@ -5,26 +5,33 @@ class Bullet {
 public:
     Bullet(){}
     Bullet(sf::Texture *texture, sf::Vector2f pos) {
-        this->shape.setTexture(*texture);
-        this->shape.setPosition(pos);
+        bulletBody.setTexture(texture);
+        bulletBody.setPosition(pos);
     }
 
     Bullet(float x, float y, std::string filename){
-        if(!texture.loadFromFile(filename)) return;
+        texture = new sf::Texture();
+        if(!texture->loadFromFile(filename)) return;
 
-        shape.setTexture(texture);
-        shape.setPosition(x, y);
+        bulletBody = sf::RectangleShape(sf::Vector2f(50.0f, 50.0f));
+        bulletBody.setTexture(texture);
+        bulletBody.setPosition(x, y);
     }
 
+    // Each bullet will check if we hit an enemy
+    // Example: bullets[i].hit(enemy[i]);
+    bool hit(sf::FloatRect otherBounds) { return bulletBody.getGlobalBounds().intersects(otherBounds); }
+
     void update(float x, float y){
-        shape.setPosition(x, y);
+        bulletBody.move(x, y);
     }
 
     void draw(sf::RenderWindow* window){
-        window->draw(shape);
+        window->draw(bulletBody);
     }
 
 private:
-    sf::Sprite shape;
-    sf::Texture texture;
+    // sf::Sprite shape;
+    sf::RectangleShape bulletBody;
+    sf::Texture* texture;
 };

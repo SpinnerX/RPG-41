@@ -4,35 +4,44 @@ class Enemy {
 public:
     Enemy() {
         std::string filename = "Game/assets/enemyDefault.png";
-        
-        if(!texture.loadFromFile(filename)) return;
-        shape.setTexture(texture);
-        shape.setScale(0.75f,0.75f);
-        shape.setPosition(300.f, 300.f);
+
+        texture = new sf::Texture();
+        if(!texture->loadFromFile(filename)) return;
+
+        bodyShape = sf::RectangleShape(sf::Vector2f(10.0f, 15.0f)); // This is how we get rectangle drawn onto the screen.
+        bodyShape.setTexture(texture);
+        bodyShape.setScale(0.75f,0.75f);
+        bodyShape.setPosition(300.f, 300.f);
     }
 
     Enemy(float x, float y, std::string filename){
         
-        if(!texture.loadFromFile(filename)) return;
-        shape.setTexture(texture);
+        texture = new sf::Texture();
+        if(!texture->loadFromFile(filename)) return;
+
+        bodyShape = sf::RectangleShape(sf::Vector2f(50.0f, 50.0f)); // This is how we get rectangle drawn onto the screen.
+        bodyShape.setTexture(texture);
         // this->shape.setScale(0.1f,0.1f); // This is the original value that we set it too.
-        shape.setScale(0.4f, 0.4f); // Testing enemy location and scaling.
-        shape.setPosition(x, y);
+        bodyShape.setScale(0.4f, 0.4f); // Testing enemy location and scaling.
+        bodyShape.setPosition(x, y);
     }
 
     void update(float x, float y){
-        shape.move(x, y);
+        bodyShape.move(x, y);
     }
 
-    sf::Vector2f getPosition() const { return shape.getPosition(); }
+    sf::FloatRect getBoundaries() { return bodyShape.getGlobalBounds(); }
+
+    sf::Vector2f getPosition() const { return bodyShape.getPosition(); }
 
     void draw(sf::RenderWindow* window){
-        window->draw(shape);
+        window->draw(bodyShape);
     }
 
 private:
-    sf::Sprite shape;
+    sf::RectangleShape enemyBodyShape;
+    // sf::Sprite shape;
     sf::RectangleShape bodyShape;
-    sf::Texture texture;
+    sf::Texture* texture;
     sf::Vector2f position;
 };
