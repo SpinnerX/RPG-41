@@ -2,11 +2,10 @@
 #include <iostream>
 #include "common/KeyboardEvents.h"
 #include "common/Player.h"
-#include "common/Enemy.h"
+// #include "common/Enemy.h"
 #include "common/ButtonOld.h"
 #include <vector>
 #include <unistd.h>
-
 
 /**
  * @brief 
@@ -54,7 +53,6 @@ public:
         window->display();
 
         while(window->isOpen()){
-
             // Handle the fps
             sf::Clock clock;
             float Framerate = 100.f / clock.getElapsedTime().asSeconds();
@@ -77,24 +75,30 @@ public:
 
 private:
     void state(){
-        player.update(events->state()); // Allowing the player for movements
+        
 
         //Render
         window->clear();
         window->draw(backgroundSprite);
-        player.draw(window);
+        player.update(events->state(), enemies); // Allowing the player for movements
 
         // Updating enemies movements.
-        for(Enemy* enemy : enemies) enemy->update(0.1f, 0.f);
+        // for(Enemy* enemy : enemies) enemy->update(0.1f, 0.f);
 
-        for(Enemy* enemy : enemies) enemy->draw(window);
+        for(int i = 0; i < enemies.size(); i++){
+            enemies[i]->update(0.1f, 0.f);
+        }
 
-        player.renderBullets(window);
+        // for(Enemy* enemy : enemies) enemy->draw(window);
+        for(int i = 0; i < enemies.size(); i++){
+            enemies[i]->draw(window);
+        }
         
+        player.draw(window);
+        player.renderBullets(window);
+
         window->display();
     }
-
-
 
 private:
     void initEnemies(){
