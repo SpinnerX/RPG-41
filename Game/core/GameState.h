@@ -75,13 +75,12 @@ public:
 
 private:
     void state(){
-        
+        player.update(events->state()); // Allowing the player for movements
 
         //Render
         window->clear();
         window->draw(backgroundSprite);
-        player.update(events->state(), enemies); // Allowing the player for movements
-
+        
         // Updating enemies movements.
         // for(Enemy* enemy : enemies) enemy->update(0.1f, 0.f);
 
@@ -95,6 +94,7 @@ private:
         }
         
         player.draw(window);
+
         player.renderBullets(window);
 
         window->display();
@@ -112,6 +112,11 @@ private:
     void removeEnemy(int index){
         // The index is how many moves the enemy made to remove that enemy
         enemies.erase(enemies.begin() + index); // This is whats going to remove the enemy
+    }
+
+    // This should return an index of the enemy we hit.
+    int hit(){
+
     }
 
 private:
