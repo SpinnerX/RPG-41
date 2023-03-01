@@ -115,7 +115,7 @@ target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 target_link_libraries(${PROJECT_NAME} "-framework IOKit")
 target_link_libraries(${PROJECT_NAME} glfw ${OPENGL_gl_LIBRARY})
 target_link_libraries(${PROJECT_NAME} GLEW::GLEW) # This helps us get rid of the "___glewGenBuffers" reference error
-target_link_libraries(${PROJECT_NAME} sfml-audio) # This is how we link the audio features of sfml onto this project
+target_link_libraries(${PROJECT_NAME} sfml-audio) # This is how we link the audio features of sfml onto this project, found on through link: https://en.sfml-dev.org/forums/index.php?topic=26960.0
 
 
 target_link_libraries(
