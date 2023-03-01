@@ -23,10 +23,7 @@ public:
         height = h;
         this->title = title;
 
-        enemies = std::vector<Enemy *>();
-
-        maxEnemies = 4;
-        for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
+        
     }
 
     ~GameState(){
@@ -41,7 +38,14 @@ public:
 
         events = new KeyboardInputHandler(window);
 
-        initEnemies(); // Spawn enemies, everytime this window opens up.
+        
+
+        // This allows us to reset the enemies original position everytime we go back to this function call.
+        enemies = std::vector<Enemy *>();
+        maxEnemies = 4;
+        for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
+
+
 
         window->setVisible(true);
         window->draw(backgroundSprite);
@@ -80,34 +84,34 @@ private:
         //Render
         window->clear();
         window->draw(backgroundSprite);
-        
-        // Updating enemies movements.
-        // for(Enemy* enemy : enemies) enemy->update(0.1f, 0.f);
 
-        for(int i = 0; i < enemies.size(); i++){
-            enemies[i]->update(0.1f, 0.f);
+        float x = 0.1f;
+        float y = 0.0f;
+        // Updates the movements of the enemies
+        for(Enemy* enemy : enemies){
+            /**
+             * @brief 
+             TODO: Debug and fix the movement
+             So, the enemy can move to the right, then when the enemy hits the right side of window
+             the enemy can bounce back and hit the left side of the window and move to the right-side, initially.
+
+             This is a bug, that we need help fixing...
+             * 
+             */
+            enemy->update(x, y);
+
         }
 
         player.collision(enemies);
 
-        // for(Enemy* enemy : enemies) enemy->draw(window);
-        for(int i = 0; i < enemies.size(); i++){
-            enemies[i]->draw(window);
-        }
+
+        for(Enemy* enemy : enemies) enemy->draw(window);
         
         player.draw(window);
 
         player.renderBullets(window);
 
         window->display();
-    }
-
-private:
-    void initEnemies(){
-        enemies = std::vector<Enemy *>();
-
-        maxEnemies = 4;
-        for(size_t i = 0; i < maxEnemies; i++) enemies.push_back(new Enemy(i * 100, 100, "Game/assets/enemyDefault.png"));
     }
 
 private:
