@@ -1,6 +1,8 @@
+#pragma once
 #include <SFML/Graphics.hpp>
+#include "GameCharacters.h"
 
-class Enemy {
+class Enemy : public GameCharacter{
 public:
     Enemy() {
         std::string filename = "Game/assets/enemyDefault.png";
@@ -30,17 +32,16 @@ public:
         bodyShape.move(x, y);
     }
 
-    sf::FloatRect getBoundaries() { return bodyShape.getGlobalBounds(); }
+    sf::FloatRect getBoundaries() override { return bodyShape.getGlobalBounds(); }
 
     sf::Vector2f getPosition() const { return bodyShape.getPosition(); }
 
-    void draw(sf::RenderWindow* window){
+    void draw(sf::RenderWindow* window) override {
         window->draw(bodyShape);
     }
 
 private:
-    sf::RectangleShape enemyBodyShape;
-    sf::RectangleShape bodyShape;
-    sf::Texture* texture;
+    // sf::RectangleShape bodyShape;
+    // sf::Texture* texture;
     sf::Vector2f position;
 };

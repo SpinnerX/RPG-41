@@ -27,6 +27,12 @@ class SoundFX {
                     buffer.loadFromFile("Game/assets/sounds/gametrack.wav");
                     sound.setBuffer(buffer);
                     sound.play();
+                    break;
+                case 4:
+                    buffer.loadFromFile("Game/assets/sounds/dieSound.wav");
+                    sound.setBuffer(buffer);
+                    sound.play();
+                    break;
             }
         }
 
